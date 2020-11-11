@@ -41,6 +41,7 @@
     ]
   },
   "devDependencies": {
+    "localstoragedb": "^2.3.2",
     "msw": "^0.21.3"
   }
 }
