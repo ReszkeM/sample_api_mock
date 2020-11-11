@@ -1,19 +1,19 @@
 # Sample api mock using MSW and LocalStorageDB
 
-# MSW
+## MSW
 
-## Usefull links
+### Usefull links
 - https://github.com/mswjs/msw
 - https://mswjs.io/docs/
 
-## Instalation
+### Instalation
 ```
 npm install msw --save-dev
 # or
 yarn add msw --dev
 ```
 
-## Sample mock definition
+### Sample mock definition
 create file, eg. `src/mocks/octocat-handlers.ts` with sample mocks:
 ```
 import { rest } from 'msw';
@@ -45,12 +45,12 @@ export const octocatHandlers = [
 ];
 ```
 
-## Init service worker
+### Init service worker
 ```
 npx msw init public/
 ```
 
-## Setup workers
+### Setup workers
 create file, eg. `src/mocks/setup-worker.ts` and setup worker with your example mocks:
 ```
 import { setupWorker } from 'msw'
@@ -66,12 +66,12 @@ import { worker } from './mocks/setup-worker';
 worker.start()
 ```
 
-# localStorageDB
+## localStorageDB
 
-## Usefull links
+### Usefull links
 - https://github.com/knadh/localStorageDB
 
-## Instalation
+### Instalation
 ```
 npm install localstoragedb --save-dev
 # or
@@ -79,12 +79,12 @@ yarn add localstoragedb --dev
 
 ```
 
-## Adding types
+### Adding types
 When using typesctipt my VSCodium couldn't detect types, probably because of wrong file name.  
 VSC is looking for `node_modules/localstoragedb/localstoragedb.d.ts` when file is actually under `node_modules/localstoragedb/localStorageDB.d.ts`, so it simpl uses CamelCase.  
 To make it work you can simply copy the content of `node_modules/localstoragedb/localStorageDB.d.ts` and create your types file `src/@types/localstoragedb.d.ts`.  
 
-## Setup database
+### Setup database
 - You can simply create your db by type:
 ```
 var db = new localStorageDB('SampleApiMock', 'localStorage');
