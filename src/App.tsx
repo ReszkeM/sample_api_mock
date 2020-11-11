@@ -1,6 +1,9 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { worker } from './api-mock/setup-worker';
+
+worker.start()
 
 function App() {
   return (

@@ -1,46 +1,67 @@
-# Getting Started with Create React App
+# Sample api mock using MSW and LocalStorageDB
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# MSW
 
-## Available Scripts
+## Usefull links
+- https://github.com/mswjs/msw
+- https://mswjs.io/docs/
 
-In the project directory, you can run:
+## Instalation
+```
+npm install msw --save-dev
+# or
+yarn add msw --dev
+```
 
-### `yarn start`
+## Sample mock definition
+create file, eg. `src/mocks/octocat-handlers.ts` with sample mocks:
+```
+import { rest } from 'msw';
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+export const octocatHandlers = [
+  rest.get('https://github.com/octocat', (req, res, ctx) => {
+    return res(
+      ctx.delay(1000),
+      ctx.status(202, 'Mocked status'),
+      ctx.json({
+        message: 'Mocked response JSON body'
+      }),
+    )
+  }),
+  rest.post('https://github.com/octocat', (req, res, ctx) => {
+    return res(
+      ctx.delay(1000),
+      ctx.status(202, 'Mocked status')
+    )
+  }),
+  rest.put('https://github.com/octocat', (req, res, ctx) => {
+    return res(
+      ctx.status(403),
+      ctx.json({
+        errorMessage: 'Not authorized',
+      }),
+    )
+  })
+];
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Init service worker
+```
+npx msw init public/
+```
 
-### `yarn test`
+## Setup workers
+create file, eg. `src/mocks/setup-worker.ts` and setup worker with your example mocks:
+```
+import { setupWorker } from 'msw'
+import { octocatHandlers } from './octocat-handlers'
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+export const worker = setupWorker(...octocatHandlers)
+```
 
-### `yarn build`
+then start worker in yours `index.tsx`
+```
+import { worker } from './mocks/setup-worker';
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+worker.start()
+```
