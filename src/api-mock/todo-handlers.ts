@@ -6,7 +6,7 @@ export const todoHandlers = [
     const todos = getDatabase().queryAll('todos');
 
     return res(
-      ctx.delay(1000),
+      ctx.delay(500),
       ctx.status(200),
       ctx.json(todos),
     )
@@ -17,18 +17,18 @@ export const todoHandlers = [
     const todos = getDatabase().queryAll("todos", { query: { ID: todoId } });
 
     return res(
-      ctx.delay(1000),
+      ctx.delay(500),
       ctx.status(200),
       ctx.json(todos),
     )
   }),
   rest.post('https://sample-api-mock.com/todos', (req, res, ctx) => {
     const db = getDatabase();
-    db.insert("todos", req.body);
+    db.insert("todos", JSON.parse(req.body as string));
     db.commit();
 
     return res(
-      ctx.delay(1000),
+      ctx.delay(500),
       ctx.status(200),
     )
   }),
@@ -36,11 +36,11 @@ export const todoHandlers = [
     const { todoId } = req.params;
 
     const db = getDatabase();
-    db.update("todos", { ID: todoId }, () => req.body);
+    db.update("todos", { ID: todoId }, () => JSON.parse(req.body as string));
     db.commit();
 
     return res(
-      ctx.delay(1000),
+      ctx.delay(500),
       ctx.status(200),
       ctx.json({
         errorMessage: 'Not authorized',
@@ -55,7 +55,7 @@ export const todoHandlers = [
     db.commit();
 
     return res(
-      ctx.delay(1000),
+      ctx.delay(500),
       ctx.status(200),
     )
   })
